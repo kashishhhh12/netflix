@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Netflix Clone Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root,[data-theme="light"]{--bg:#f5f5f1;--surface:#ffffff;--surface-2:#f1f1ed;--text:#161616;--muted:#666;--border:rgba(0,0,0,.12);--primary:#e50914;--shadow:0 18px 40px rgba(0,0,0,.10)}
+    [data-theme="dark"]{--bg:#111111;--surface:#181818;--surface-2:#202020;--text:#f5f5f5;--muted:#b3b3b3;--border:rgba(255,255,255,.12);--primary:#e50914;--shadow:0 18px 40px rgba(0,0,0,.45)}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:Inter,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+    a{text-decoration:none;color:inherit} img{display:block;max-width:100%;height:auto} button{font:inherit;cursor:pointer}
+    .topbar{position:sticky;top:0;z-index:50;display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:linear-gradient(180deg,rgba(0,0,0,.8),rgba(0,0,0,.35),transparent);backdrop-filter:blur(8px)}
+    .logo{font-weight:800;letter-spacing:-.04em;color:#e50914;font-size:2rem}
+    .nav{display:flex;gap:18px;align-items:center;color:#fff}.nav a{font-size:.95rem;color:#f2f2f2cc}.nav a:hover{color:#fff}
+    .controls{display:flex;gap:12px;align-items:center}.toggle{border:1px solid var(--border);background:var(--surface);color:var(--text);padding:10px 14px;border-radius:999px}
+    .hero{position:relative;min-height:88vh;background-image:linear-gradient(90deg,rgba(0,0,0,.88) 0%,rgba(0,0,0,.65) 40%,rgba(0,0,0,.25) 70%,rgba(0,0,0,.88) 100%),url('https://image.tmdb.org/t/p/original/5YZbUmjbMa3ClvSW1Wj3D6XGolb.jpg');background-size:cover;background-position:center;display:flex;align-items:end}
+    .hero-inner{padding:96px 24px 72px;max-width:720px;color:#fff}.eyebrow{font-size:.82rem;letter-spacing:.35em;text-transform:uppercase;color:#ffffffaa}.hero h1{font-size:clamp(2.7rem,6vw,5rem);line-height:.95;margin:16px 0}.hero p{font-size:1.05rem;color:#ffffffd0;max-width:56ch}
+    .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}.btn{padding:14px 22px;border-radius:8px;border:1px solid transparent;font-weight:700}.btn-primary{background:#fff;color:#111}.btn-secondary{background:rgba(255,255,255,.22);color:#fff;backdrop-filter:blur(10px)}
+    .section{padding:30px 24px 8px}.section h2{font-size:1.55rem;margin:0 0 16px}.rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(180px,1fr);gap:14px;overflow-x:auto;padding-bottom:10px}.rail::-webkit-scrollbar{height:8px}.rail::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16);border-radius:999px}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow);min-width:180px}.poster{aspect-ratio:2/3;object-fit:cover;width:100%}.card-body{padding:12px 12px 14px}.meta{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.14em}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;padding:30px 24px 70px}.panel{grid-column:span 12;background:var(--surface);border:1px solid var(--border);border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
+    .panel-header{padding:22px 22px 0}.panel-header h3{margin:0;font-size:1.35rem}.panel-header p{margin:8px 0 0;color:var(--muted)}
+    .profile-grid,.feature-grid{display:grid;gap:16px;padding:22px}.profile-grid{grid-template-columns:repeat(2,1fr)} .feature-grid{grid-template-columns:repeat(1,1fr)}
+    .profile{padding:20px;border:1px solid var(--border);border-radius:18px;background:var(--surface-2);text-align:center}.avatar{width:84px;height:84px;border-radius:18px;display:grid;place-items:center;margin:0 auto 12px;font-weight:800;font-size:2rem;color:#fff}
+    .search-wrap,.modal-wrap{padding:22px}.searchbar{display:flex;gap:12px;padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2)}.searchbar input{flex:1;border:none;background:transparent;color:var(--text);outline:none}
+    .result-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-top:18px}.mini{padding:12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--border)}
+    .modal-hero{position:relative;min-height:320px;background-image:linear-gradient(180deg,transparent,rgba(0,0,0,.82)),url('https://image.tmdb.org/t/p/original/3CxUndGhUcZdt1Zggjdb2HkLLQX.jpg');background-size:cover;background-position:center;color:#fff;display:flex;align-items:end}
+    .modal-copy{padding:22px;max-width:780px}.badge{display:inline-flex;padding:6px 10px;border-radius:999px;background:#ffffff1a;border:1px solid #ffffff22;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase}
+    .two-col{display:grid;grid-template-columns:1.4fr .9fr;gap:22px;padding:22px}.side-box{padding:18px;border-radius:16px;background:var(--surface-2);border:1px solid var(--border)}
+    .cta{padding:32px 24px 64px}.cta-box{background:linear-gradient(135deg,#1d1d1d,#0f0f0f);border:1px solid rgba(255,255,255,.08);color:#fff;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:18px}
+    .footer{padding:18px 24px 44px;color:var(--muted);font-size:.92rem}
+    @media (min-width:900px){.panel.span-6{grid-column:span 6}.feature-grid{grid-template-columns:repeat(3,1fr)}.profile-grid{grid-template-columns:repeat(4,1fr)}.topbar{padding:18px 38px}.hero-inner,.section,.grid,.cta,.footer{padding-left:38px;padding-right:38px}}
+    @media (max-width:760px){.nav{display:none}.topbar{padding:14px 16px}.hero-inner,.section,.grid,.cta,.footer{padding-left:16px;padding-right:16px}.two-col{grid-template-columns:1fr}.rail{grid-auto-columns:minmax(150px,72vw)}.profile-grid{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div style="display:flex;gap:26px;align-items:center">
+      <div class="logo">NETFLIX</div>
+      <nav class="nav">
+        <a href="#landing">Home</a>
+        <a href="#profiles">Profiles</a>
+        <a href="#browse">Browse</a>
+        <a href="#details">Details</a>
+        <a href="#deploy">Deploy</a>
+      </nav>
+    </div>
+    <div class="controls">
+      <button class="toggle" data-theme-toggle aria-label="Switch theme">Toggle theme</button>
+    </div>
+  </header>
+
+  <section class="hero" id="landing">
+    <div class="hero-inner">
+      <div class="eyebrow">Netflix clone preview</div>
+      <h1>Unlimited movies, shows, trailers, and polished UI flows.</h1>
+      <p>This single HTML preview showcases the website you requested: landing page, profile selection, browse dashboard, TMDB-style content rails, search experience, details modal design, and deploy-ready architecture.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#browse">Browse preview</a>
+        <a class="btn btn-secondary" href="#deploy">Deployment notes</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="browse">
+    <h2>Main browse dashboard</h2>
+    <div class="rail">
+      <article class="card"><img class="poster" src="https://image.tmdb.org/t/p/w500/4m1Au3YkjqsxF8iwQy0fPYSxE0h.jpg" alt="Teach You a Lesson poster" loading="lazy" width="500" height="750"><div class="card-body"><div class="meta">Trending now</div><strong>Teach You a Lesson</strong></div></article>
+      <article class="card"><img class="poster" src="https://image.tmdb.org/t/p/w500/5qGIxdEO841C0tdY8vOdLoRVrr0.jpg" alt="Meg 2 poster" loading="lazy" width="500" height="750"><div class="card-body"><div class="meta">Top rated</div><strong>Meg 2: The Trench</strong></div></article>
+      <article class="card"><img class="poster" src="https://image.tmdb.org/t/p/w500/zsbolOkw8RhTU4DKOrpf4M7KCmi.jpg" alt="Dhurandhar poster" loading="lazy" width="500" height="750"><div class="card-body"><div class="meta">Originals</div><strong>Dhurandhar</strong></div></article>
+      <article class="card"><img class="poster" src="https://image.tmdb.org/t/p/w500/cnqwv5Uz3UW5f086IWbQKr3ksJr.jpg" alt="Chak De India poster" loading="lazy" width="500" height="750"><div class="card-body"><div class="meta">Sports drama</div><strong>Chak De! India</strong></div></article>
+      <article class="card"><img class="poster" src="https://image.tmdb.org/t/p/w500/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg" alt="Baki Hanma poster" loading="lazy" width="500" height="750"><div class="card-body"><div class="meta">Anime</div><strong>Baki Hanma</strong></div></article>
+      <article class="card"><img class="poster" src="https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg" alt="One Piece poster" loading="lazy" width="500" height="750"><div class="card-body"><div class="meta">Series</div><strong>One Piece</strong></div></article>
+    </div>
+  </section>
+
+  <section class="grid" id="profiles">
+    <article class="panel span-6">
+      <div class="panel-header"><h3>Profile management screen</h3><p>Profile switching grid inspired by the real Netflix identity flow, optimized for mobile and desktop.</p></div>
+      <div class="profile-grid">
+        <div class="profile"><div class="avatar" style="background:#ef4444">K</div><strong>Kashish</strong></div>
+        <div class="profile"><div class="avatar" style="background:#f59e0b">M</div><strong>Movies</strong></div>
+        <div class="profile"><div class="avatar" style="background:#06b6d4">A</div><strong>Anime</strong></div>
+        <div class="profile"><div class="avatar" style="background:#22c55e">K</div><strong>Kids</strong></div>
+      </div>
+    </article>
+
+    <article class="panel span-6">
+      <div class="panel-header"><h3>Search and discovery</h3><p>Dynamic search bar pattern for TMDB-powered title lookup with fast suggestion cards.</p></div>
+      <div class="search-wrap">
+        <div class="searchbar"><span>🔎</span><input value="stranger things" aria-label="Search titles" /></div>
+        <div class="result-list">
+          <div class="mini"><strong>Stranger Things</strong><div class="meta">Series • 2016</div></div>
+          <div class="mini"><strong>Money Heist</strong><div class="meta">Series • 2017</div></div>
+          <div class="mini"><strong>Berlin</strong><div class="meta">Series • 2023</div></div>
+          <div class="mini"><strong>Squid Game</strong><div class="meta">Series • 2021</div></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="panel">
+      <div class="panel-header"><h3>Core feature set</h3><p>The full project includes the screens and interactions you requested, organized as a deploy-ready Next.js application.</p></div>
+      <div class="feature-grid">
+        <div class="mini"><strong>Landing page</strong><p>Dark theme hero, language selector, sign-in CTA, and email subscription banner.</p></div>
+        <div class="mini"><strong>Browse dashboard</strong><p>Hero banner, horizontal rails, scalable cards, and genre-style browsing flows.</p></div>
+        <div class="mini"><strong>Details modal</strong><p>Overview, year, rating, similar recommendations, and trailer playback layout.</p></div>
+      </div>
+    </article>
+  </section>
+
+  <section class="section" id="details">
+    <h2>Details modal preview</h2>
+  </section>
+
+  <section class="panel" style="margin:0 24px;border-radius:24px;overflow:hidden">
+    <div class="modal-hero">
+      <div class="modal-copy">
+        <span class="badge">Trailer ready</span>
+        <h2 style="font-size:clamp(2rem,4vw,3.4rem);margin:14px 0 8px">Meg 2: The Trench</h2>
+        <p style="max-width:62ch;color:#ffffffd2">A cinematic details experience with embedded trailer playback, descriptive metadata, and recommendation rails designed to mimic the Netflix content info flow.</p>
+      </div>
+    </div>
+    <div class="two-col">
+      <div>
+        <p>The production project uses a modal overlay pattern for title details. When a user clicks a card, the app can fetch enriched TMDB metadata, show the release year, render similar recommendations, and play official trailers via YouTube iFrame embeds.</p>
+        <div class="actions">
+          <button class="btn btn-primary">Play trailer</button>
+          <button class="btn" style="background:var(--surface-2);color:var(--text);border:1px solid var(--border)">Add to My List</button>
+        </div>
+      </div>
+      <aside class="side-box">
+        <strong>Metadata panel</strong>
+        <p style="margin:12px 0 0;color:var(--muted)">Release year: 2023<br>Category: Movie<br>State: Trailer-capable<br>Persistence: Supabase-ready</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="cta" id="deploy">
+    <div class="cta-box">
+      <div>
+        <div class="eyebrow">Deploy-ready starter</div>
+        <h2 style="margin:.45rem 0 0;font-size:clamp(1.8rem,4vw,3rem)">Built for local use, GitHub, and Vercel deployment.</h2>
+      </div>
+      <p style="color:#ffffffcf;max-width:70ch">Your downloadable project includes environment templates, TMDB setup, Supabase-ready persistence scaffolding, a health-check API route, and a clean source structure with app pages, reusable components, and deployment configuration.</p>
+      <div class="feature-grid" style="padding:0">
+        <div class="mini" style="background:#ffffff12;border-color:#ffffff18;color:#fff"><strong>.env.example</strong><p>TMDB and optional Supabase keys.</p></div>
+        <div class="mini" style="background:#ffffff12;border-color:#ffffff18;color:#fff"><strong>vercel.json</strong><p>Simple Vercel framework configuration.</p></div>
+        <div class="mini" style="background:#ffffff12;border-color:#ffffff18;color:#fff"><strong>supabase-schema.sql</strong><p>Starter database schema for My List persistence.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">Single-file preview of the Netflix clone website project. Use the downloadable archive for the complete Next.js source.</footer>
+
+  <script>
+    (function(){
+      const btn=document.querySelector('[data-theme-toggle]');
+      const root=document.documentElement;
+      let mode=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+      root.setAttribute('data-theme',mode);
+      btn.addEventListener('click',()=>{
+        mode=mode==='dark'?'light':'dark';
+        root.setAttribute('data-theme',mode);
+      });
+    })();
+  </script>
+</body>
+</html>
